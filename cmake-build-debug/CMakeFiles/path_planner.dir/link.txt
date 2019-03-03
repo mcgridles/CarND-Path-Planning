@@ -1,2 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc libpath_planner.a  CMakeFiles/path_planner.dir/src/path_planner.cpp.o CMakeFiles/path_planner.dir/src/helpers.cpp.o
-/Library/Developer/CommandLineTools/usr/bin/ranlib libpath_planner.a
