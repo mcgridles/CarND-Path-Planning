@@ -29,8 +29,6 @@ int main() {
   // The max s value before wrapping around the track back to 0
   double max_s = 6945.554;
 
-  PathPlanner planner;
-
   std::ifstream in_map_(map_file_.c_str(), std::ifstream::in);
 
   string line;
@@ -52,6 +50,8 @@ int main() {
     map_waypoints_dx.push_back(d_x);
     map_waypoints_dy.push_back(d_y);
   }
+
+  PathPlanner planner(map_waypoints_x, map_waypoints_y, map_waypoints_s, map_waypoints_dx, map_waypoints_dy);
 
   h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,
                &map_waypoints_dx,&map_waypoints_dy,&planner]
