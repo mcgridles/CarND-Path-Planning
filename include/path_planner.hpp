@@ -2,6 +2,7 @@
 #define PATH_PLANNING_PATH_PLANNER_HPP
 
 #include "helpers.h"
+#include "spline.h"
 
 class PathPlanner {
 public:
@@ -10,15 +11,24 @@ public:
                 vector<double> map_waypoints_dx, vector<double> map_waypoints_dy);
     ~PathPlanner() = default;
 
-    // Path generation
-    std::vector<std::vector<double>> generate_path(double car_x, double car_y, double car_s, double car_d,
-                                                   double car_yaw, double car_speed);
+    // Path generation and behavior function
+    std::vector<std::vector<double>> generate_path(double car_x, double car_y,
+                                                   double car_s, double car_d,
+                                                   double car_yaw, double car_speed,
+                                                   std::vector<std::vector<double>> prev_path,
+                                                   std::vector<std::vector<double>> cars);
 
 private:
-    // Test functions provided by Udacity
-    std::vector<std::vector<double>> straight_path(double car_x, double car_y, double car_yaw);
-    std::vector<std::vector<double>> curve_path(double car_x, double car_y, double car_yaw);
+    // Car states
     std::vector<std::vector<double>> follow_lane(double car_s, double car_d);
+    std::vector<std::vector<double>> change_right(double car_s, double car_d);
+    std::vector<std::vector<double>> change_left(double car_s, double car_d);
+
+    // Trajectory creation
+    std::vector<std::vector<double>> path(double car_s, double car_d, double goal_d);
+
+    // Spline calculation
+    std::vector<tk::spline> calculate_spline(double car_s, double car_d, double goal_d);
 
     // Map waypoints
     vector<double> map_waypoints_x;
@@ -28,11 +38,14 @@ private:
     vector<double> map_waypoints_dy;
 
     // Number of points in generated path
-    int path_length = 50;
+    const int path_length = 50;
 
-    // Speed
-    double dist_inc = 0.3;
-    double max_dist_inc = 0.3;
+    // Reference velocity
+    double speed = 0.0;
+
+    // Velocity/acceleration limits
+    const double MAX_SPEED = 49.5;
+    const double MAX_ACC = 0.2;
 };
 
 #endif //PATH_PLANNING_PATH_PLANNER_HPP

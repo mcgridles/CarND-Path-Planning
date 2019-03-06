@@ -100,7 +100,29 @@ int main() {
            * TODO: define a path made up of (x,y) points that the car will visit
            *   sequentially every .02 seconds
            */
-          vector<vector<double>> next_vals = planner.generate_path(car_x, car_y, car_s, car_d, car_yaw, car_speed);
+          std::vector<std::vector<double>> prev_path;
+          int prev_size = previous_path_x.size();
+
+          for (int i=0; i<prev_size; i++) {
+            double x = previous_path_x[i];
+            double y = previous_path_y[i];
+            prev_path.push_back({x, y});
+          }
+
+          std::vector<std::vector<double>> cars;
+          int num_cars = sensor_fusion.size();
+
+          for (int i=0; i<num_cars; i++) {
+            double sensor_vx = sensor_fusion[i][3];
+            double sensor_vy = sensor_fusion[i][4];
+            double sensor_s = sensor_fusion[i][5];
+            auto sensor_d = static_cast<double>(sensor_fusion[i][6]);
+
+            cars.push_back({sensor_vx, sensor_vy, sensor_s, sensor_d});
+          }
+
+          vector<vector<double>> next_vals = planner.generate_path(car_x, car_y, car_s, car_d, car_yaw, car_speed,
+                                                                   prev_path, cars);
 
           next_x_vals = next_vals[0];
           next_y_vals = next_vals[1];
