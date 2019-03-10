@@ -19,16 +19,14 @@ public:
                                                    std::vector<std::vector<double>> cars);
 
 private:
-    // Car states
-    std::vector<std::vector<double>> follow_lane(double car_s, double car_d);
-    std::vector<std::vector<double>> change_right(double car_s, double car_d);
-    std::vector<std::vector<double>> change_left(double car_s, double car_d);
-
     // Trajectory creation
-    std::vector<std::vector<double>> path(double car_s, double car_d, double goal_d);
+    std::vector<std::vector<double>> path(double car_s, double car_d, int goal_lane,
+                                          std::vector<std::vector<double>>& prev_path);
 
     // Spline calculation
-    std::vector<tk::spline> calculate_spline(double car_s, double car_d, double goal_d);
+    std::vector<tk::spline> calculate_spline(double car_s, double car_d, int goal_lane);
+    std::vector<bool> detect_cars(std::vector<std::vector<double>>& cars, double car_s, int lane);
+    int check_lane(double d);
 
     // Map waypoints
     vector<double> map_waypoints_x;
