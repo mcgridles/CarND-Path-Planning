@@ -51,7 +51,7 @@ int main() {
     map_waypoints_dy.push_back(d_y);
   }
 
-  PathPlanner planner(map_waypoints_x, map_waypoints_y, map_waypoints_s, map_waypoints_dx, map_waypoints_dy);
+  PathPlanner planner(map_waypoints_x, map_waypoints_y, map_waypoints_s);
 
   h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,
                &map_waypoints_dx,&map_waypoints_dy,&planner]
@@ -100,14 +100,8 @@ int main() {
            * TODO: define a path made up of (x,y) points that the car will visit
            *   sequentially every .02 seconds
            */
-          std::vector<std::vector<double>> prev_path;
+          std::vector<std::vector<double>> prev_path = {previous_path_x, previous_path_y};
           int prev_size = previous_path_x.size();
-
-          for (int i=0; i<prev_size; i++) {
-            double x = previous_path_x[i];
-            double y = previous_path_y[i];
-            prev_path.push_back({x, y});
-          }
 
           std::vector<std::vector<double>> cars;
           int num_cars = sensor_fusion.size();
@@ -121,8 +115,7 @@ int main() {
             cars.push_back({sensor_vx, sensor_vy, sensor_s, sensor_d});
           }
 
-          vector<vector<double>> next_vals = planner.generate_path(car_x, car_y, car_s, car_d, car_yaw, car_speed,
-                                                                   prev_path, cars);
+          vector<vector<double>> next_vals = planner.generate_path(car_x, car_y, car_s, car_d, car_yaw, prev_path, cars);
 
           next_x_vals = next_vals[0];
           next_y_vals = next_vals[1];
