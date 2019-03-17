@@ -92,8 +92,6 @@ std::vector<std::vector<double>> PathPlanner::path(double car_x, double car_y, d
 
         if ( speed > MAX_SPEED ) {
             speed = MAX_SPEED;
-        } else if ( speed < MAX_ACC ) {
-            speed = MAX_ACC;
         }
 
         double num_steps = goal_distance / (0.02 * speed / 2.24);
